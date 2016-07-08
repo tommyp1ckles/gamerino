@@ -41,16 +41,28 @@ var lastBalloon = Date.now();
 var MILLISECOND = 1000;
 var BALLOON_INTERVAL = 1 * MILLISECOND;
 var balloons = [];
+
+var BALLOON_SIZE_RANGE = 1.5;
+var BALLOON_SIZE_MIN = .25;
+
+var SPEED_MIN = .5;
+var SPEED_MAX = 3.5;
+
 function update() {
 	if (Date.now() - lastBalloon >= BALLOON_INTERVAL) {
     var x = Math.random() * WIDTH;
-    var y = Math.random() * HEIGHT;
-		var balloon = game.add.sprite(x, y, 'balloon');;
+    //var y = Math.random() * HEIGHT;
+	var y = HEIGHT;
+	var balloon = game.add.sprite(x, y, 'balloon');
+	var scale = BALLOON_SIZE_MIN + Math.random() * BALLOON_SIZE_RANGE;
+	balloon.scale.setTo(scale,scale);
     balloon.inputEnabled = true;
+
     balloon.events.onInputDown.add(popBalloon, this);
-		balloon.outOfBoundsKill = true;
-		balloons.push({
+	balloon.outOfBoundsKill = true;
+	balloons.push({
 			g: balloon,
+			speed: (Math.random() * SPEED_MAX) + SPEED_MIN,
 		});
 		lastBalloon = Date.now();
     
@@ -58,7 +70,7 @@ function update() {
 
 	var i;
 	for (i = 0; i < balloons.length; i++) {
-		balloons[i].g.y += -1;
+		balloons[i].g.y += -1 * balloons[i].speed;
 	}
 }
 
