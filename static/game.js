@@ -10,14 +10,39 @@ var game = new Phaser.Game(
 
 function preload() {
 	game.load.image('star', '/static/star.png');
-	var background = game.load.image("background", "/static/background.jpg");
+	game.load.image("background", "/static/background.jpg");
 }
+
+var graphics;
 
 function create() {
-	var background = game.add.sprite(0, 0, 'background');
+	background = game.add.sprite(0, 0, 'background');
 	game.add.sprite(100, 100, 'star');
 	game.physics.startSystem(Phaser.Physics.ARCADE);
-}
 
+	graphics = game.add.graphics();
+}
+var WIDTH = 800;
+var HEIGHT = 600;
+
+var lastBalloon = Date.now();
+var MILLISECOND = 1000;
+var BALLOON_INTERVAL = 1 * MILLISECOND;
+var balloons = [];
 function update() {
+	if (Date.now() - lastBalloon >= BALLOON_INTERVAL) {
+		graphcis = game.add.graphics();
+		graphics.lineStyle(0);
+		graphics.beginFill(0xFFFF0B, 0.5);
+		var x = Math.random() * WIDTH;
+		var y = Math.random() * HEIGHT;
+		graphics.drawEllipse(x, y, 60, 75);
+		graphics.endFill();
+		balloons.push({
+			g: graphics,
+			locX: x,
+			locY: y,
+		});
+		lastBalloon = Date.now();
+	}
 }
