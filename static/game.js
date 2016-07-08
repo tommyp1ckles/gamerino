@@ -48,6 +48,10 @@ var MILLISECOND = 1000;
 var BALLOON_INTERVAL = 1 * MILLISECOND;
 const BG_DELAY = 5 * MILLISECOND;
 var balloons = [];
+const BALLOON_WIDTH = 80;
+
+const BALLOON_SPAWN_AREA = 0.3;
+const BALLOON_DESTROY_Y = 10;
 
 var BALLOON_SIZE_RANGE = 1.5;
 var BALLOON_SIZE_MIN = .25;
@@ -59,22 +63,15 @@ var speed = 3;
 function update() {
 	if (Date.now() - lastSpeedChange >= 20 * SECOND) {
 		lastSpeedChange = Date.now();
-		console.log("speed increase yo!: ", speed);
 		speed++;
 	}
 	if (Date.now() - lastBalloon >= BALLOON_INTERVAL) {
-		var x = Math.random() * WIDTH;
-		//var y = Math.random() * HEIGHT;
-		var y = HEIGHT;
-		var balloon = game.add.sprite(x, y, 'balloon');
+		var x = BALLOON_WIDTH + Math.random() * WIDTH - (2 * BALLOON_WIDTH);
+		var y = (game.world.height * BALLOON_SPAWN_AREA) + Math.random() * (HEIGHT - (game.world.height * BALLOON_SPAWN_AREA));
 		var scale = BALLOON_SIZE_MIN + Math.random() * BALLOON_SIZE_RANGE;
-		balloon.scale.setTo(scale,scale);
-		var balloon = game.add.sprite(x, y, 'balloon_r');
-		balloon.scale.setTo(scale, scale);
-		balloon.inputEnabled = true;
 
-		var y = Math.random() * HEIGHT;
 		var balloon = game.add.sprite(x, y, 'balloon_r');;
+		balloon.scale.setTo(scale, scale);
 		balloon.inputEnabled = true;
 		balloon.events.onInputDown.add(popBalloon, this);
 		balloon.outOfBoundsKill = true;
@@ -93,6 +90,9 @@ function update() {
 	var i;
 	for (i = 0; i < balloons.length; i++) {
 		balloons[i].g.y += -1 * balloons[i].speed;
+		if (balloons[i].g.y <= BALLOON_DESTROY_Y) {
+			destroyBalloon(balloons[i].g);
+		}
 	}
 
 	gameTimer += FRAME_DELAY;
@@ -106,4 +106,10 @@ function popBalloon (balloon) {
 	//  Add and update the score
 	score += 10;
 	scoreText.text = 'Score: ' + score;
+}
+
+function destroyBalloon (balloon) {
+	console.log('balloon destroyed');
+	balloon.kill();
+	// TODO: Remove heart, check for game over
 }
