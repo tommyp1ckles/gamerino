@@ -21,7 +21,7 @@ function preload() {
 	game.load.image("background", "/static/background.jpg");
 }
 
-var graphics;
+//var graphics;
 
 function create() {
 	background = game.add.sprite(0, 0, 'background');
@@ -33,7 +33,7 @@ function create() {
   
   scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
-	graphics = game.add.graphics();
+	//graphics = game.add.graphics();
 }
 
 var lastBalloon = Date.now();
@@ -43,6 +43,9 @@ var balloons = [];
 function update() {
 	if (Date.now() - lastBalloon >= BALLOON_INTERVAL) {
 		var balloon = game.add.graphics();
+    balloon.inputEnabled = true;
+    balloon.events.onInputDown.add(popBalloon, this);
+		balloon.outOfBoundsKill = true;
 		balloon.lineStyle(0);
 		balloon.beginFill(0xFFFF0B, 0.5);
 		var x = Math.random() * WIDTH;
@@ -51,13 +54,14 @@ function update() {
 		balloon.endFill();
 		balloons.push({
 			g: balloon,
-			locX: x,
-			locY: y,
 		});
 		lastBalloon = Date.now();
     
-    balloon.inputEnabled = true;
-    balloon.events.onInputDown.add(popBalloon, this);
+	}
+
+	var i;
+	for (i = 0; i < balloons.length; i++) {
+		balloons[i].g.y += -1;
 	}
 }
 
