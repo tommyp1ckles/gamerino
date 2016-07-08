@@ -15,12 +15,14 @@ var score = 0;
 var scoreText;
 
 function preload() {
+	game.load.image('star', '/static/star.png');
 	game.load.image("background", "static/background.jpg");
 	game.load.image('balloon_r', '/static/balloon_red.png');
 	game.load.image('balloon_g', '/static/balloon_green.png');
 	game.load.image('balloon_b', '/static/balloon_blue.png');
 	game.load.image('balloon_y', '/static/balloon_yell.png');
 	game.load.image('balloon_p', '/static/balloon_purp.png');
+	game.load.image("background", "/static/background.jpg");
 }
 
 //var graphics;
@@ -40,13 +42,37 @@ var gameTimer = 0;
 
 const BG_SPEED = 0.25;
 var lastBalloon = Date.now();
+var SECOND = 1000;
+var BALLOON_INTERVAL = 1 * SECOND;
 var MILLISECOND = 1000;
 var BALLOON_INTERVAL = 1 * MILLISECOND;
 const BG_DELAY = 5 * MILLISECOND;
 var balloons = [];
+
+var BALLOON_SIZE_RANGE = 1.5;
+var BALLOON_SIZE_MIN = .25;
+
+var lastSpeedChange = Date.now();
+var SPEED_MIN = .5;
+var speed = 3;
+
 function update() {
+	if (Date.now() - lastSpeedChange >= 20 * SECOND) {
+		lastSpeedChange = Date.now();
+		console.log("speed increase yo!: ", speed);
+		speed++;
+	}
 	if (Date.now() - lastBalloon >= BALLOON_INTERVAL) {
 		var x = Math.random() * WIDTH;
+		//var y = Math.random() * HEIGHT;
+		var y = HEIGHT;
+		var balloon = game.add.sprite(x, y, 'balloon');
+		var scale = BALLOON_SIZE_MIN + Math.random() * BALLOON_SIZE_RANGE;
+		balloon.scale.setTo(scale,scale);
+		var balloon = game.add.sprite(x, y, 'balloon_r');
+		balloon.scale.setTo(scale, scale);
+		balloon.inputEnabled = true;
+
 		var y = Math.random() * HEIGHT;
 		var balloon = game.add.sprite(x, y, 'balloon_r');;
 		balloon.inputEnabled = true;
@@ -54,6 +80,7 @@ function update() {
 		balloon.outOfBoundsKill = true;
 		balloons.push({
 			g: balloon,
+			speed: (Math.random() * speed) + SPEED_MIN,
 		});
 		lastBalloon = Date.now();
 	}
@@ -65,7 +92,7 @@ function update() {
 
 	var i;
 	for (i = 0; i < balloons.length; i++) {
-		balloons[i].g.y += -1;
+		balloons[i].g.y += -1 * balloons[i].speed;
 	}
 
 	gameTimer += FRAME_DELAY;
