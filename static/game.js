@@ -15,7 +15,9 @@ var score = 0;
 var scoreText;
 
 function preload() {
-	game.load.image("background", "static/background.jpg");
+	game.load.image("background", "/static/background.jpg");
+	game.load.image("spikes", "/static/spikes.png");
+  game.load.image('heart', '/static/heart.png');
 	game.load.image('balloon_r', '/static/balloon_red.png');
 	game.load.image('balloon_g', '/static/balloon_green.png');
 	game.load.image('balloon_b', '/static/balloon_blue.png');
@@ -25,15 +27,30 @@ function preload() {
 
 //var graphics;
 
+var playGroup;
+var uiGroup;
+var hearts = [];
+var NUM_HEARTS = 5;
+var spikes;
+
 function create() {
 	background = game.add.sprite(0, 0, 'background');
 	background.anchor.setTo(0, 0.925);
+  playGroup = game.add.group();
+  uiGroup = game.add.group();
 
 	//background.width = game.world.width;
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
+  spikes = game.add.sprite(0, 0, 'spikes');
 	scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
-
+  for(var i = NUM_HEARTS; i > 0; i--) {
+    hearts.push(
+      game.add.sprite(WIDTH - (90 * i), 16, 'heart')
+    );
+  }
+  uiGroup.add(spikes);
+  uiGroup.add(scoreText);
 	//graphics = game.add.graphics();
 }
 
@@ -54,6 +71,7 @@ function update() {
 		balloon.inputEnabled = true;
 		balloon.events.onInputDown.add(popBalloon, this);
 		balloon.outOfBoundsKill = true;
+    playGroup.add(balloon);
 		balloons.push({
 			g: balloon,
 		});
