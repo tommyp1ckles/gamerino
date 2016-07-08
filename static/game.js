@@ -18,7 +18,11 @@ var star;
 
 function preload() {
 	game.load.image('star', '/static/star.png');
-  game.load.image('balloon', '/static/balloon.png');
+  game.load.image('balloon_r', '/static/balloon_red.png');
+  game.load.image('balloon_g', '/static/balloon_green.png');
+  game.load.image('balloon_b', '/static/balloon_blue.png');
+  game.load.image('balloon_y', '/static/balloon_yell.png');
+  game.load.image('balloon_p', '/static/balloon_purp.png');
 	game.load.image("background", "/static/background.jpg");
 }
 
@@ -45,7 +49,7 @@ function update() {
 	if (Date.now() - lastBalloon >= BALLOON_INTERVAL) {
     var x = Math.random() * WIDTH;
     var y = Math.random() * HEIGHT;
-		var balloon = game.add.sprite(x, y, 'balloon');;
+		var balloon = game.add.sprite(x, y, 'balloon_r');;
     balloon.inputEnabled = true;
     balloon.events.onInputDown.add(popBalloon, this);
 		balloon.outOfBoundsKill = true;
@@ -65,7 +69,7 @@ function update() {
 function popBalloon (balloon) {
   console.log('balloon popped');
   // Remove the balloon
-  // balloon.kill();
+  balloon.kill();
 
   //  Add and update the score
   score += 10;
