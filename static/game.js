@@ -26,15 +26,13 @@ function preload() {
 //var graphics;
 
 function create() {
+	game.physics.startSystem(Phaser.Physics.ARCADE);
+
 	background = game.add.sprite(0, 0, 'background');
 	background.anchor.setTo(0, 0.925);
 
-	//background.width = game.world.width;
-	game.physics.startSystem(Phaser.Physics.ARCADE);
-
 	scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
-	//graphics = game.add.graphics();
 }
 
 const FRAME_DELAY = 16;
@@ -58,7 +56,6 @@ function update() {
 			g: balloon,
 		});
 		lastBalloon = Date.now();
-
 	}
 
 	// Update bg
