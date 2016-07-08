@@ -18,6 +18,7 @@ var star;
 
 function preload() {
 	game.load.image('star', '/static/star.png');
+  game.load.image('balloon', '/static/balloon.png');
 	game.load.image("background", "/static/background.jpg");
 }
 
@@ -42,16 +43,12 @@ var BALLOON_INTERVAL = 1 * MILLISECOND;
 var balloons = [];
 function update() {
 	if (Date.now() - lastBalloon >= BALLOON_INTERVAL) {
-		var balloon = game.add.graphics();
+    var x = Math.random() * WIDTH;
+    var y = Math.random() * HEIGHT;
+		var balloon = game.add.sprite(x, y, 'balloon');;
     balloon.inputEnabled = true;
     balloon.events.onInputDown.add(popBalloon, this);
 		balloon.outOfBoundsKill = true;
-		balloon.lineStyle(0);
-		balloon.beginFill(0xFFFF0B, 0.5);
-		var x = Math.random() * WIDTH;
-		var y = Math.random() * HEIGHT;
-		balloon.drawEllipse(x, y, 60, 75);
-		balloon.endFill();
 		balloons.push({
 			g: balloon,
 		});
