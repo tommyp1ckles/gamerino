@@ -29,7 +29,6 @@ var lastBalloon = Date.now();
 var MILLISECOND = 1000;
 var BALLOON_INTERVAL = 1 * MILLISECOND;
 var balloons = [];
-var 
 function update() {
 	if (Date.now() - lastBalloon >= BALLOON_INTERVAL) {
 		graphics = game.add.graphics();
