@@ -16,6 +16,11 @@ var scoreText;
 
 function preload() {
 	game.load.image("background", "static/background.jpg");
+	game.load.image('balloon_r', '/static/balloon_red.png');
+	game.load.image('balloon_g', '/static/balloon_green.png');
+	game.load.image('balloon_b', '/static/balloon_blue.png');
+	game.load.image('balloon_y', '/static/balloon_yell.png');
+	game.load.image('balloon_p', '/static/balloon_purp.png');
 }
 
 //var graphics;
@@ -43,16 +48,12 @@ const BG_DELAY = 5 * MILLISECOND;
 var balloons = [];
 function update() {
 	if (Date.now() - lastBalloon >= BALLOON_INTERVAL) {
-		var balloon = game.add.graphics();
+		var x = Math.random() * WIDTH;
+		var y = Math.random() * HEIGHT;
+		var balloon = game.add.sprite(x, y, 'balloon_r');;
 		balloon.inputEnabled = true;
 		balloon.events.onInputDown.add(popBalloon, this);
 		balloon.outOfBoundsKill = true;
-		balloon.lineStyle(0);
-		balloon.beginFill(0xFFFF0B, 0.5);
-		var x = Math.random() * WIDTH;
-		var y = Math.random() * HEIGHT;
-		balloon.drawEllipse(x, y, 60, 75);
-		balloon.endFill();
 		balloons.push({
 			g: balloon,
 		});
@@ -63,10 +64,6 @@ function update() {
 	// Update bg
 	if (gameTimer >= BG_DELAY && background.y < background.height - game.world.height) {
 		background.y += BG_SPEED;
-	} else {
-		console.log("POS: ", background.y);
-		console.log("OK: ", background.height);
-		console.log("DEBUG: ", background.height * (0.925));
 	}
 
 	var i;
@@ -80,7 +77,7 @@ function update() {
 function popBalloon (balloon) {
 	console.log('balloon popped');
 	// Remove the balloon
-	// balloon.kill();
+	balloon.kill();
 
 	//  Add and update the score
 	score += 10;
